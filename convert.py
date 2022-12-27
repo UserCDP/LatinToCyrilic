@@ -13,20 +13,7 @@ ALPHABET = {
     'U': 'У', 'V': 'В', 'W': 'В', 'X': 'Х', 'Y': 'Ы', 'Z': 'З'
 } # Then we have symbols for 'IU', 'CH' and 'IA'Ю Ч Я
 
-Tk().withdraw()
-filename = askopenfilename()
-pdf_reader = PyPDF2.PdfReader(open(filename, 'rb'))
-
-outfile = open(filename.split('.')[0] + '-ch.txt', 'w')
-
-k = 0
-while True:
-    try:
-        text = pdf_reader.pages[k].extract_text()
-    except IndexError:
-        break
-
-    k += 1
+def convert_text(text, outfile):
     n = len(text)
     words_per_line = 0
     for i in range(n):
@@ -65,4 +52,25 @@ while True:
                 outfile.write('\n')
                 words_per_line = 0
 
+
+Tk().withdraw()
+filename = askopenfilename()
+outfile = open(filename.split('.')[0] + '-ch.txt', 'w')
+
+if filename.split('.')[1].upper() == 'PDF':
+    pdf_reader = PyPDF2.PdfReader(open(filename, 'rb'))
+
+    k = 0
+    while True:
+        try:
+            text = pdf_reader.pages[k].extract_text()
+        except IndexError:
+            break
+        convert_text(text, outfile)
+        k += 1
+
+elif filename.split('.')[1].upper() == 'TXT':
+    file = open(filename, 'r')
+    for line in file:
+        convert_text(line, outfile)
 outfile.close()
