@@ -1,0 +1,2 @@
+Convert this text from latin to cyrilic (this program is mostly intended for romanian,
+because of the phonetic nature of the language)
